@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+      - mq
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  mq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: myuser
+      RABBITMQ_DEFAULT_PASS: mypassword
+
+volumes:
+  db-data:
